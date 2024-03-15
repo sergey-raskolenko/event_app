@@ -4,6 +4,7 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated
 from .models import Organization, Event
 from .serializers import OrganizationSerializer, EventSerializer, EventFilterSerializer
+from myapp.tasks import create_event_with_delay
 
 
 class OrganizationCreateView(generics.CreateAPIView):
@@ -18,6 +19,11 @@ class EventCreateView(generics.CreateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        event_data = serializer.validated_data
+
+        create_event_with_delay.delay(event_data)
 
 
 class EventWithUsersListView(generics.ListAPIView):
