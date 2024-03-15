@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from myapp.managers import UserManager
+from phonenumber_field.modelfields import PhoneNumberField
 
 NULLABLE = {'null': True, 'blank': True}
 
@@ -49,7 +50,8 @@ class User(AbstractUser):
     objects = UserManager()
 
     username = None
-    email = models.EmailField(unique=True, verbose_name='почта')
+    email = models.EmailField(unique=True, verbose_name='Почта пользователя')
+    phone = PhoneNumberField(verbose_name='Номер пользователя', **NULLABLE)
     organizations = models.ManyToManyField('Organization', related_name='users')
 
     USERNAME_FIELD = "email"

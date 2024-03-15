@@ -10,18 +10,20 @@ class OrganizationCreateView(generics.CreateAPIView):
     """Контроллер для создания организации"""
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
+    permission_classes = [IsAuthenticated]
 
 
 class EventCreateView(generics.CreateAPIView):
     """Контроллер для создания мероприятия"""
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+    permission_classes = [IsAuthenticated]
 
 
 class EventWithUsersListView(generics.ListAPIView):
     """
     Контроллер для получения списка всех мероприятий с информацией о всех действующих пользователей,
-    которые участвуют в организации мероприятия. Доступ для авторизованных пользователей.
+    которые участвуют в организации мероприятия.
     """
     queryset = Event.objects.all()
     serializer_class = EventSerializer
@@ -30,7 +32,7 @@ class EventWithUsersListView(generics.ListAPIView):
 
 class EventFilteredListView(generics.ListAPIView):
     """
-    Контроллер для вывода списка всех мероприятий авторизованному пользователю.
+    Контроллер для вывода списка всех мероприятий.
     Доступна сортировка, фильтрация по дате, поиск по названию, лимитная пагинация.
     """
     queryset = Event.objects.all()
